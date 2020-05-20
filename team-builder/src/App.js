@@ -38,14 +38,41 @@ function App() {
     //edit function
     const editMember = evt =>{
       evt.preventDefault();
-      const {name} = evt;
-      console.log(`${this} was clicked`)
+      const name = evt.currentTarget.name;
+      // console.log(`${evt} was clicked`)
+      // console.log(evt.currentTarget)
+      // console.log('id for nick', firstMember[0].id)
+      // console.log('id for button clicked', name)
+
+      let currentTarget = teamMembers.find(member=>{return member.id === name})
+      let targetIndex = teamMembers.indexOf(member=>{return member.id === name})
+
+      let firstHalf = teamMembers.slice(0, targetIndex-1);
+      let secondHalf = teamMembers.slice(targetIndex);
+      let totalArray = firstHalf.concat(secondHalf);
+
+      // console.log('updated team members with editted one removed', totalArray)
+
+
+      const newName = window.prompt("Change Name or leave if same", currentTarget.name);
+      const newEmail = window.prompt('Enter new email or leave if same', currentTarget.email);
+      const newRole = window.prompt('Enter new role or leave if same', currentTarget.role);
+
+      const correctedMember = {
+        username: newName,
+        email: newEmail,
+        role: newRole,
+        id: currentTarget.id
+      }
+
+      setTeamMembers([...totalArray, correctedMember]);
+      console.log(teamMembers)
     }
 
   //re renders the team list when a new member is added
   useEffect(()=>{
     // console.log('teamMembers was changed', teamMembers);
-  createMemberCards(teamMembers.map(member=>{return <MemberCard key={member.id} username={member.username} email={member.email} role={member.role} onEdit={editMember}/>}))},[teamMembers]);
+  createMemberCards(teamMembers.map(member=>{return <MemberCard key={member.id} username={member.username} email={member.email} role={member.role} onEdit={editMember} id={member.id}/>}))},[teamMembers]);
     // console.log(allMemberCards);
 
 
